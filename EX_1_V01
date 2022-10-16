@@ -1,0 +1,106 @@
+import os
+#clear
+os.system('cls')
+import numpy as np
+import pandas as pd 
+import matplotlib.pyplot as plt
+
+
+## Input-DATA==============================================================
+r1 = 1       #Radius of the fluid face (m)
+r2 = 2       #Radius change of material (m)
+r3 = 3     #Radius of the second fluid face (m)
+H=10;       #Height (m)
+tol=0.4    #tolerance ()
+T_input = 50
+maxIter=1e5
+maxdifer=1e-6
+dimension = 10
+
+
+N = int((dimension-2)/2)
+N1 = np.linspace(1, N+1, N+1)
+print("N1:", N1)
+print("lenght N1:", len(N1))
+N1_points = len(N1)-1
+print("Number of points of the first material:", N1_points)
+
+N2 = np.linspace((N1[-1]+1), 2*N+2, len(N1))
+print("N2:",N2)
+print("lenght N1:", len(N1))
+N2_points = len(N2)-1
+print("Number of points of the first material:", N2_points)
+
+r = np.append(N1, N2)
+print("Radius vector:",r)
+
+
+# Habra que unir los dos 'for' en uno pero cambiando de material
+rw1 = np.ones(len(N1))
+rw2 = np.ones(len(N2))
+delta_r1 = (r2-r1)/len(N1)
+delta_r2 = (r3-r2)/len(N2)
+
+rw = np.ones(len(r))
+
+
+for i in range(len(r)):
+    print(i)
+    if i < N2[1]:
+        rw[i] = (N1[i]-1)*delta_r1
+    
+    if i >= N2[1]:
+        rw[i] = r2+(i-N1_points-1)*delta_r2 ####ME QUE AQUI
+
+
+
+
+print("delta_r1:", delta_r1, "for  i=1 to N1+N2")
+print("delta_r2:", delta_r2, "for  i=N1+2 to N1+N2+2")
+print("rw1 vector:", rw1)
+print("rw2 vector:", rw2)
+
+#Postion of the nodes (general)
+
+
+
+
+## Domain==================================================================
+
+xp = np.linspace(0, dimension, dimension)
+x_1 = np.meshgrid(xp)  #Total lenght in (m)
+#random_data = np.random.random((dimension, dimension))
+
+delta_r1 = (r2 - r1)/N1
+
+
+
+
+
+
+
+## Discretization Equations=============================================
+mesh = np.ones((len(xp)))
+heat_flx = np.ones((len(xp)))
+aw = np.ones(len(xp))
+ae = np.ones(len(xp))
+
+parameter = 1
+
+for i in range(len(xp)):
+    heat_flx[i] =parameter*2
+    parameter = parameter+1
+
+
+#################plot simple
+#plt.contour(x_1, y_1, heat_flx, cmap = 'jet')
+#plt.colorbar()
+#plt.show()
+
+
+#'viridis', 'plasma', 'inferno', 'magma', 'cividis', 'hsv', 'jet
+#plt.imshow(heat_flx, interpolation='none', cmap='inferno')
+#plt.colorbar()
+#plt.show()
+plt.bar(heat_flx, xp)
+plt.show
