@@ -2,11 +2,15 @@ import os
 #clear
 os.system('cls')
 import numpy as np
-import pandas as pd 
-import matplotlib.pyplot as plt
+#import pandas as pd 
+#import matplotlib.pyplot as plt
 
 
 ## Input-DATA==============================================================
+#numerical input=========================================================
+N = 10 #Number of control volumes
+
+#Physical input=========================================================
 r1 = 1       #(m)
 r2 = 2       #(m)
 H=10;       #Height (m)
@@ -14,44 +18,50 @@ tol=0.4    #tolerance ()
 T_input = 25+273.15 #ºK
 maxIter=1e5
 maxdifer=1e-6
-N = 10 #Number of control volumes
-
 #Heat transfer coefficient
 #Water 30 kW/(m2K) 
 alpa_A = 30000 #W/(m^2 k)
 T_A = 50+273.15 #ºK
-
 #CO2 high pressure
 alpa_B = 5000 #W/(m^2 k)
 T_B = 250+273.15 #ºK
 dom = np.linspace(1, N+2, N+2)
 T_init = np.ones(len(dom)+2)
 
+
 #Initial Temp of the cooper
 for i in range(len(T_init)):
     T_init[i] = (T_input)
     
-print("The initial Temperature of the material, has the following vector:")
-print(T_init)
+   
+print("The initial Temperature of the material:")
 
-print("Domain:", dom)
-print("Lenght of the domain:", len(dom))
-N1_points = len(dom)-2
-print("Number of points of the first material:", N1_points,
-      "\ntaking into account that the other 2 points are the boundaries")
+print(T_init, "\n")
+
+print("Domain:", dom, "\n")
+
+print("Lenght of the domain (N+2):", len(dom), "\n")
+
+N_points = len(dom)-2
+
+print("Number of points of the first material (N):", N_points,
+      "\n")
+
+###############################################################################
+####                    rw
 
 
 rw = np.ones(int(len(dom)))
 delta_r = (r2-r1)/len(dom)
-print ("delta-r:", delta_r)
-print("TEST2")
+print ("delta-r:", delta_r, "\n")
+print("TEST1\n")
 for i in range(len(rw)):
-    rw[i] = (dom[i]/delta_r)*i # ESTO NO LO SE PORQUE NO SON DOS MATERIALES OSTIA
+    rw[i] = (dom[i]/delta_r)*i 
     
-print("delta_r1:", delta_r, "for  i=1 to N1+N2")
-print("rw vector:", rw)
+print("delta_r1:", delta_r, "for  i=1 to N1+N2\n")
+print("rw vector:", rw,"\n")
 
-print("TEST2")
+print("TEST2\n")
 #initializing lambda
 lmda = np.ones(len(T_init))
 #Thermal conductivity initial at steady state
@@ -65,7 +75,7 @@ for i in range(len(T_init)):
     - 1.556*(10**(-13))*T_init[i]**5)
 
 print("The initial conduction coefficient heat transfer of the material, has the following vector:")
-print(lmda)
+print(lmda,"\n")
 
 
 #Postion of the nodes (general)
