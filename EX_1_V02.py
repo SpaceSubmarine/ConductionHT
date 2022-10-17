@@ -2,8 +2,8 @@ import os
 #clear
 os.system('cls')
 import numpy as np
-#import pandas as pd 
-#import matplotlib.pyplot as plt
+import pandas as pd 
+import matplotlib.pyplot as plt
 
 
 ## Input-DATA==============================================================
@@ -35,33 +35,68 @@ for i in range(len(T_init)):
     
    
 print("The initial Temperature of the material:")
-
 print(T_init, "\n")
-
 print("Domain:", dom, "\n")
-
 print("Lenght of the domain (N+2):", len(dom), "\n")
-
 N_points = len(dom)-2
-
-print("Number of points of the first material (N):", N_points,
-      "\n")
-
-###############################################################################
-####                    rw
+print("Number of points of the first material (N):", N_points,"\n")
 
 
-rw = np.ones(int(len(dom)))
+## Domain Discretization==============================================================
+
 delta_r = (r2-r1)/len(dom)
-print ("delta-r:", delta_r, "\n")
-print("TEST1\n")
-for i in range(len(rw)):
-    rw[i] = (dom[i]/delta_r)*i 
+print("delta_r:", delta_r, "for  i=1 to N1+N2\n")
+
+
+xf = np.ones(len(dom)-1)
+for i in range(len(xf)):
+    xf[i] = delta_r*(i+1)-delta_r
+ 
     
-print("delta_r1:", delta_r, "for  i=1 to N1+N2\n")
-print("rw vector:", rw,"\n")
+### Intento fallido de aplicar la formula
+#xp = np.ones(len(dom))
+#for i in range(1,len(xp)-1):
+#    xp[i] = (xf[i]+xf[i-1])/2
+#xp[0]=0
+
+
+# Hago que la distancia entre los limites i los nodos intenos
+# Sean iguales que la distancia entre nodos para simplificar
+
+xp = np.ones(len(dom))
+for i in range(len(xp)):
+    xp[i] = dom[i]-1
+    
+xp = np.linspace(0, (r2-r1), N+2)
+
+#plt.plot(xp)
+#plt.show
+
+
+print("TEST1\n")
+## Previous Calculations ========================================================
+
+re = np.ones(len(xp))
+rw = np.ones(len(xp))
+for i in range(len(re)):
+    rw[i] = xp[i] - delta_r
+    rw[i] = xp[i] + delta_r
+    
+se = np.ones(len(re))
+sw = np.ones(len(rw))
+for i in range(len(se)):
+    se[i] = 2*(np.pi)*re[i]*H  
+    sw[i] = se[i]  
+
+
+#problemas en los valores del volumen
+vp = np.ones(len(xp))
+for i in range(len(vp)-1):
+    vp[i] = np.pi*(re[i]**2-rw[i]**2)*H
 
 print("TEST2\n")
+
+
 #initializing lambda
 lmda = np.ones(len(T_init))
 #Thermal conductivity initial at steady state
@@ -77,12 +112,6 @@ for i in range(len(T_init)):
 print("The initial conduction coefficient heat transfer of the material, has the following vector:")
 print(lmda,"\n")
 
-
-#Postion of the nodes (general)
-rp = np.ones(len(dom))
-print(len(rp))
-for i in range(2,len(rp)):
-    rp[i] = (rw[i]+rw[i-1])/2
 
 
 
