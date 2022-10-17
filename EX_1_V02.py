@@ -41,16 +41,17 @@ print("Number of points of the first material:", N1_points,
       "\ntaking into account that the other 2 points are the boundaries")
 
 
-
-rw = np.ones(len(dom))
+rw = np.ones(int(len(dom)))
 delta_r = (r2-r1)/len(dom)
+print ("delta-r:", delta_r)
+print("TEST2")
 for i in range(len(rw)):
-    rw[i] = rw # ESTO NO LO SE PORQUE NO SON DOS MATERIALES OSTIA
+    rw[i] = (dom[i]/delta_r)*i # ESTO NO LO SE PORQUE NO SON DOS MATERIALES OSTIA
     
 print("delta_r1:", delta_r, "for  i=1 to N1+N2")
 print("rw vector:", rw)
 
-
+print("TEST2")
 #initializing lambda
 lmda = np.ones(len(T_init))
 #Thermal conductivity initial at steady state
