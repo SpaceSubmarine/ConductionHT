@@ -18,6 +18,7 @@ tol=0.4    #tolerance ()
 T_input = 25+273.15 #ºK
 maxIter=1e5
 maxdifer=1e-6
+
 #Heat transfer coefficient
 #Water 30 kW/(m2K) 
 alpa_A = 30000 #W/(m^2 k)
@@ -43,7 +44,6 @@ print("Number of points of the first material (N):", N_points,"\n")
 
 
 ## Domain Discretization==============================================================
-
 delta_r = (r2-r1)/len(dom)
 print("delta_r:", delta_r, "for  i=1 to N1+N2\n")
 
@@ -87,7 +87,7 @@ for i in range(len(re)):
     sw[i] = se[i] 
 
 
-#problemas en los valores del volumen
+# Doubts with the values obtained for the cylindrical volume
 vp = np.ones(len(xp))
 for i in range(len(vp)):
     vp[i] = np.pi*((re[i]**2)-(rw[i]**2))*H
@@ -95,9 +95,10 @@ for i in range(len(vp)):
 print("TEST2\n")
 
 
-#initializing lambda
+# Initializing lambda
 lmda = np.ones(len(T_init))
-#Thermal conductivity initial at steady state
+# Thermal conductivity of water initial considering steady state
+# with saturated conditions
 for i in range(len(T_init)):
     
     lmda[i] = (-1.176 
@@ -110,8 +111,4 @@ for i in range(len(T_init)):
 print("The initial conduction coefficient heat transfer of the material, has the following vector:")
 print(lmda,"\n")
 
-## Domain==================================================================
-
-#'viridis', 'plasma', 'inferno', 'magma', 'cividis', 'hsv', 'jet
-#plt.imshow(dom, interpolation='none', cmap='inferno')
 

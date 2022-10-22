@@ -110,9 +110,6 @@ for i in range(len(T_init)):
 print("The initial conduction coefficient heat transfer of the material, has the following vector:")
 print(lmda,"\n")
 
-
-
-
 ## Domain==================================================================
 
 #'viridis', 'plasma', 'inferno', 'magma', 'cividis', 'hsv', 'jet
