@@ -91,16 +91,20 @@ diff = 100000
 stored_diff = np.ones(Max_iter)
 iteration = 1
 
+lambda_1=385 #from tables W/mk
+
+ap = (lambda_1*sw/dpw) + (lambda_1*se/dpe)
+aw = lambda_1*sw/dpw
+ae = lambda_1*se/dpw
+bp = q_dot * density *Vp
+
 
 if diff > Max_error and iteration < Max_iter:    
     for i in range(1,len(T)-1):        
         
-        ap[i] = (lambda_1[i]*sw/dpw) + (lambda_1[i]*se/dpe)
-        aw[i] = lambda_1[i]*sw/dpw
-        ae[i] = lambda_1[i]*se/dpw
-        bp[i] = q_dot * density *Vp
         
-        T_f[i] =  (aw[i]*T[i-1] + ae[i]*T[i+1] + bp[i])/ap[i]
+        
+        T_f[i] =  (aw*T[i-1] + ae*T[i+1] + bp)/ap
         
         '''lambda_1[i] = (-1.176 
         + 7.915*(10**(-3))*T_f[i] 
