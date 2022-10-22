@@ -1,8 +1,8 @@
 import os 
 os.system('cls')
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt 
+#import pandas as pd
+#import matplotlib.pyplot as plt 
 
 
 ## Input-Data ==============================================
@@ -16,11 +16,11 @@ se=sw #m2
 density = 8830 #kg/m3
 Vp=thick*heigh*width #m3
 
-T_a = 80
-T_b = 200
+T_a = 2
+T_b = 2000
 alpha_a = 25000 #W/(m^2 k)
-alpha_b = 2000
-q_dot = 1 #NEED TO KNOW THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+alpha_b = 2000 # random number  W/(m^2 k)
+q_dot = 300 #have problems 
 
 T_a = T_a+273 # Celsius to Kelvin
 T_b = T_b +273 # Celsius to Kelvin
@@ -28,7 +28,7 @@ lambda_1 = 386 #W/mK cooper conduction heat transfer at  20ºC
 
 
 # Numerical Data
-N = 100
+N = 5
 Max_error = (10**(-10))
 T_input = 25
 T_input = T_input+273
@@ -68,11 +68,24 @@ T_f = np.ones(len(T))
 
 dpw = delta_x
 dpe = delta_x
-ap = (lambda_1*sw/dpw) + (lambda_1*se/dpe)
-aw = lambda_1*sw/dpw
-ae = lambda_1*se/dpw
-bp = q_dot * density *Vp
 
+ap = np.zeros(len(T))
+aw = np.zeros(len(T))
+ae = np.zeros(len(T))
+bp = np.zeros(len(T))
+
+#initializing  lambda but is for water
+'''
+lambda_1 = np.zeros(len(T))
+for i in range(len(T_init)):
+    
+    lambda_1[i] = (-1.176 
+    + 7.915*(10**(-3))*T_init[i] 
+    + 1.486*(10**(-5))*T_init[i]**2 
+    - 1.317*(10**(-7))*T_init[i]**3 
+    + 2.476*(10**(-10))*T_init[i]**4 
+    - 1.556*(10**(-13))*T_init[i]**5)
+'''
 
 diff = 100000
 stored_diff = np.ones(Max_iter)
@@ -81,7 +94,21 @@ iteration = 1
 
 if diff > Max_error and iteration < Max_iter:    
     for i in range(1,len(T)-1):        
-        T_f[i] =  (aw*T[i-1] + ae*T[i+1] + bp)/ap
+        
+        ap[i] = (lambda_1[i]*sw/dpw) + (lambda_1[i]*se/dpe)
+        aw[i] = lambda_1[i]*sw/dpw
+        ae[i] = lambda_1[i]*se/dpw
+        bp[i] = q_dot * density *Vp
+        
+        T_f[i] =  (aw[i]*T[i-1] + ae[i]*T[i+1] + bp[i])/ap[i]
+        
+        '''lambda_1[i] = (-1.176 
+        + 7.915*(10**(-3))*T_f[i] 
+        + 1.486*(10**(-5))*T_f[i]**2 
+        - 1.317*(10**(-7))*T_f[i]**3 
+        + 2.476*(10**(-10))*T_f[i]**4 
+        - 1.556*(10**(-13))*T_f[i]**5)
+        '''
         
         stored_diff[i] = np.max(T-T_f)
         
