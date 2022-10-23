@@ -54,7 +54,7 @@ print('Enter the temperature of the solid '
     'material in Celsius:')
 #T_b = int(input())
 T_input = int(input())
-T_input = 250
+#T_input = 250
 T_input = T_input+273
 Max_iter =500000
 
@@ -116,12 +116,12 @@ diff = 100000
 stored_diff = np.ones(Max_iter)
 iteration = 1
 
-T[0] = T_a#(ae[0]*T[1]+bp[0]) / ap[0]
-T[-1] = T_b#(aw[-1]*T[-2]+bp[-1]) / ap[-1]
+
 #GAUSS-SEIDEL
 while diff > Max_error and iteration < Max_iter:
     for i in range(1,N+1):
-        
+        T[0] = T_a#(ae[0]*T[1]+bp[0]) / ap[0]
+        T[-1] = T_b#(aw[-1]*T[-2]+bp[-1]) / ap[-1]
         T_f[i] =  (aw[i]*T[i-1] + ae[i]*T[i+1] + bp[i])/ap[i]
         
     iteration = iteration + 1
