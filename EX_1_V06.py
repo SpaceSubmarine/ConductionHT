@@ -2,24 +2,26 @@ import os
 os.system('cls')
 import numpy as np
 #import pandas as pd
-#import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt 
 
 
 ## Input-Data ==============================================
 #physical data:
 
-thick = 3 #m
-heigh = 2 #m
+thick = 30 #m
+heigh = 1 #m
 width = 1 #m
 sw = width*heigh #m2
 se=sw #m2
 density = 8830 #kg/m3
 Vp=thick*heigh*width #m3
 
-T_a = 80
-T_b = 80
-alpha_a = 25000 #W/(m^2 k)
-alpha_b = 25000 # random number  W/(m^2 k)
+print('Enter Ta in Celsius:')
+T_a = int(input())
+print('Enter Tb in Celsius:')
+T_b = int(input())
+alpha_a = 2000 #W/(m^2 k)
+alpha_b = 2000 # random number  W/(m^2 k)
 q_dot = 30 #have problems 
 
 T_a = T_a+273 # Celsius to Kelvin
@@ -27,7 +29,7 @@ T_b = T_b +273 # Celsius to Kelvin
 lambda_1 = 386 #W/mK cooper conduction heat transfer at  20ºC
 
 # Numerical Data
-N = 10
+N = 3
 Max_error = (10**(-18))
 T_input = 800
 T_input = T_input+273
@@ -94,8 +96,9 @@ diff = 100000
 stored_diff = np.ones(Max_iter)
 iteration = 1
 
+#Gauss-Seidel
 while diff > Max_error and iteration < Max_iter:    
-    for i in range(1,len(T)-1):        
+    for i in range(1,N+1):        
         print(i)
         #T_f[i] =  (aw*T[i-1] + ae*T[i+1] + bp)/ap
         T_f[i] = (ae[i]*T[i+1] + bp[i]) / ap[i]
@@ -106,11 +109,17 @@ while diff > Max_error and iteration < Max_iter:
     diff = np.max(T-T_f)
 
     T = T_f
-    print(iteration)
+    
+    #print(iteration)
     print(diff)
-    print("error:", diff<Max_error)
+    #print("error:", diff<Max_error)
     
     iteration = iteration+1
 
+
 T[0] = (ae[0]*T[1]+bp[0]) / ap[0]
 T[-1] = (aw[-1]*T[-2]+bp[-1]) / ap[-1]        
+
+
+plt.plot(T)
+plt.show()
