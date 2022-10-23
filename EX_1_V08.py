@@ -133,7 +133,7 @@ while diff > Max_error and iteration < Max_iter:
 print("Number of iterations:", iteration)
 if iteration < 50:
     print("The number of iterations seems to be very lower."
-    "Maybe the code has something wrong with the coefficients"
+    " Maybe the code has something wrong with the discretization coefficients"
     " or with the Gauss-Seidel method")
 
 
