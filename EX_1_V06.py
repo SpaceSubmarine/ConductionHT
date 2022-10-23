@@ -123,3 +123,4 @@ T[-1] = (aw[-1]*T[-2]+bp[-1]) / ap[-1]
 
 plt.plot(T)
 plt.show()
+
