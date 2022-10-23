@@ -16,22 +16,28 @@ se=sw #m2
 density = 8830 #kg/m3
 Vp=thick*heigh*width #m3
 
-print('Enter Ta in Celsius:')
-T_a = int(input())
-print('Enter Tb in Celsius:')
-T_b = int(input())
+print('Enter Ta of liquid water in Celsius:')
+#T_a = int(input())
+T_a = 25
+print('Enter Tb of liquid water in Celsius:')
+#T_b = int(input())
+T_b = 25
 alpha_a = 2000 #W/(m^2 k)
 alpha_b = 2000 # random number  W/(m^2 k)
-q_dot = 30 #have problems 
+q_dot = 0.00030 #have problems 
 
 T_a = T_a+273 # Celsius to Kelvin
 T_b = T_b +273 # Celsius to Kelvin
 lambda_1 = 386 #W/mK cooper conduction heat transfer at  20ºC
 
 # Numerical Data
-N = 3
+print('Enter the number of control volumes N:')
+#N = int(input())
+N = 10
 Max_error = (10**(-18))
-T_input = 800
+print('Enter the solid Temperature in Celsius:')
+#T_b = int(input())
+T_input = 25
 T_input = T_input+273
 Max_iter =30000
 
@@ -89,21 +95,24 @@ for i in range(len(ap)):
     ae[i] = lambda_1*se/dpw
     bp[i] = q_dot * density *Vp
 
-T[0] = (ae[0]*T[1]+bp[0]) / ap[0]
-T[-1] = (aw[-1]*T[-2]+bp[-1]) / ap[-1]
+
 
 diff = 100000
 stored_diff = np.ones(Max_iter)
 iteration = 1
 
-#Gauss-Seidel
+
+
+"""
+# OLD Gauss-Seidel
 while diff > Max_error and iteration < Max_iter:    
     for i in range(1,N+1):        
-        print(i)
-        #T_f[i] =  (aw*T[i-1] + ae*T[i+1] + bp)/ap
-        T_f[i] = (ae[i]*T[i+1] + bp[i]) / ap[i]
+        T[0] = T_a#(ae[0]*T[1]+bp[0]) / ap[0]
+        T[-1] = T_b#(aw[-1]*T[-2]+bp[-1]) / ap[-1]
+        T_f[i] =  (aw[i]*T[i-1] + ae[i]*T[i+1] + bp[i])/ap[i]
+        #T_f[i] = (ae[i]*T[i+1] + bp[i]) / ap[i]
         
-        # vector to plot the error evolution 
+    # vector to plot the error evolution 
     stored_diff[i] = np.max(T-T_f)
     
     diff = np.max(T-T_f)
@@ -115,12 +124,25 @@ while diff > Max_error and iteration < Max_iter:
     #print("error:", diff<Max_error)
     
     iteration = iteration+1
+"""
+
+#GAUSS-SEIDEL
+while diff > Max_error and iteration < Max_iter:
+    for i in range(1,N+1):
+        T[0] = T_a#(ae[0]*T[1]+bp[0]) / ap[0]
+        T[-1] = T_b#(aw[-1]*T[-2]+bp[-1]) / ap[-1]
+        T_f[i] =  (aw[i]*T[i-1] + ae[i]*T[i+1] + bp[i])/ap[i]
+        
+    iteration = iteration + 1
+    stored_diff[i] = np.max(T-T_f)
+    diff = float(np.max(abs(T-T_f)))
+    print(diff)
+    T=T_f
 
 
-T[0] = (ae[0]*T[1]+bp[0]) / ap[0]
-T[-1] = (aw[-1]*T[-2]+bp[-1]) / ap[-1]        
+#T[0] = (ae[0]*T[1]+bp[0]) / ap[0]
+#T[-1] = (aw[-1]*T[-2]+bp[-1]) / ap[-1]        
 
 
 plt.plot(T)
 plt.show()
-
